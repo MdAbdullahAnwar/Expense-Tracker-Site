@@ -1,119 +1,176 @@
+/* Styles for the main authentication form */
 .auth {
-    max-width: 25rem;
-    margin: 5rem auto;
-    padding: 2rem;
-    border-radius: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.5s ease-in-out;
+  max-width: 28rem;
+  margin: 0.83rem auto;
+  padding: 2.5rem;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.6s ease-in-out;
+  box-sizing: border-box;
+}
+
+/* FadeIn animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
+}
+
+/* Title styles */
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Input container */
+.control {
+  margin-bottom: 0.5rem;
+}
+
+.control label {
+  display: block;
+  margin-bottom: 0.7rem;
+  color: #5a6a7d;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.control input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e0e6ed;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f8fafc;
+  transition: all 0.3s ease-in-out;
+  color: #333;
+}
+
+.control input:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  background-color: #ffffff;
+}
+
+/* Button container */
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.actions button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin-bottom: 1.2rem;
+}
+
+/* Login button styles */
+.actions button.login {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.actions button.login:hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+}
+
+.actions button:disabled {
+  background-color: #c7d2fe;
+  cursor: not-allowed;
+}
+
+/* Forgot password button styles */
+.forgot {
+  background: none;
+  border: none;
+  color: #007bff;
+  text-decoration: underline;
+  margin: 0.5rem 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.forgot:hover {
+  color: #0056b3;
+}
+
+/* Switch account mode button styles */
+.toggle {
+  background-color: #10b981 !important; 
+  color: white !important;
+  border: none;
+  padding: 0.5rem 1rem !important;
+  margin: 0 !important;
+  font-size: 1rem !important;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle:hover {
+  background-color: #059669 !important; 
+  text-decoration: none;
+}
+
+/* Error message styles */
+p {
+  color: #ef4444;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  background-color: #fee2e2;
+  border-radius: 6px;
+  text-align: center;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 480px) {
+  .auth {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+
   h1 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    font-weight: 600;
+    font-size: 1.5rem;
   }
-  
-  .control {
-    margin-bottom: 1.5rem;
-  }
-  
+
   .control label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #5a6a7d;
-    font-weight: 500;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
-  
+
   .control input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid #e0e6ed;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    background-color: #f8fafc;
+    padding: 0.7rem 1rem;
   }
-  
-  .control input:focus {
-    outline: none;
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-  }
-  
-  .actions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 2rem;
-  }
-  
+
   .actions button {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #4f46e5;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 1rem;
-  }
-  
-  .actions button:hover {
-    background-color: #4338ca;
-    transform: translateY(-1px);
-  }
-  
-  .actions button:disabled {
-    background-color: #c7d2fe;
-    cursor: not-allowed;
-  }
-  
-  .toggle {
-    background-color: transparent !important;
-    color: #4f46e5 !important;
-    border: none;
-    padding: 0.5rem !important;
-    margin: 0 !important;
-    font-size: 0.9rem !important;
-    text-decoration: underline;
-  }
-  
-  .toggle:hover {
-    color: #4338ca !important;
-    transform: none !important;
-    text-decoration: none;
-  }
-  
-  p {
-    color: #ef4444;
-    margin-bottom: 1rem;
     font-size: 0.9rem;
-    padding: 0.5rem;
-    background-color: #fee2e2;
-    border-radius: 6px;
-    text-align: center;
   }
-  
-  .actions p {
-    color: #64748b;
-    background-color: transparent;
-    margin: 1rem 0;
+
+  .toggle {
+    font-size: 0.85rem;
   }
+
+  .forgot {
+    font-size: 0.85rem;
+  }
+}

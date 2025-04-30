@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import AuthContext from "../../Store/AuthContext";
 import classes from "./MainNavigation.module.css";
@@ -7,12 +7,19 @@ import classes from "./MainNavigation.module.css";
 const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const isLoggedIn = authCtx.isLoggedIn;
 
   const logoutHandler = () => {
     authCtx.logout();
-    navigate("./auth");
+    navigate("/auth?mode=login");
+  };
+
+  const toggleAuthModeHandler = () => {
+    const currentMode = new URLSearchParams(location.search).get("mode");
+    const newMode = currentMode === "signup" ? "login" : "signup";
+    navigate(`/auth?mode=${newMode}`);
   };
 
   return (
@@ -24,7 +31,9 @@ const MainNavigation = () => {
         <ul>
           {!isLoggedIn && (
             <li>
-              <Link to="/auth">Login</Link>
+              <button onClick={toggleAuthModeHandler}>
+                {location.search.includes("signup") ? "Login" : "Sign Up"}
+              </button>
             </li>
           )}
           {isLoggedIn && (
