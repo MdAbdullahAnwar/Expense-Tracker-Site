@@ -112,6 +112,7 @@ h1 {
 
 .forgot:hover {
   color: #0056b3;
+  border: solid silver 1px;
 }
 
 /* Switch account mode button styles */
@@ -132,13 +133,15 @@ h1 {
   text-decoration: none;
 }
 
-/* Error message styles */
-p {
+/* Loading message styles */
+.loading {
+  width: 100%;
   color: #ef4444;
   margin-bottom: 1rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
   padding: 0.5rem;
   background-color: #fee2e2;
+  border: solid #ff3333 1px;
   border-radius: 6px;
   text-align: center;
 }

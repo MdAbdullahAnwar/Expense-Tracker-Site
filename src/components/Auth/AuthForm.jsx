@@ -163,7 +163,7 @@ const AuthForm = () => {
               {isLogin ? "Login" : "Create Account"}
             </button>
           )}
-          {isLoading && <p>Sending Request...</p>}
+          {isLoading && <p className={classes.loading}>Sending Request...</p>}
 
           {isLogin && (
             <button

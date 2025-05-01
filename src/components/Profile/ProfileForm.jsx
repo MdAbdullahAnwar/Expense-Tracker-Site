@@ -1,73 +1,93 @@
 import { useRef, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import AuthContext from "../../Store/AuthContext";
 import classes from "./ProfileForm.module.css";
 
 const ProfileForm = () => {
-  const newPasswordInputRef = useRef();
+  const fullNameInputRef = useRef();
+  const profileUrlInputRef = useRef();
   const authCtx = useContext(AuthContext);
-  const [feedback, setFeedback] = useState(null);
+  const navigate = useNavigate();
 
-  const submitHandler = async (event) => {
+  const [successMessage, setSuccessMessage] = useState("");
+
+  const cancelHandler = () => {
+    navigate("/");
+  };
+
+  const updateProfile = (event) => {
     event.preventDefault();
-    const enteredNewPassword = newPasswordInputRef.current.value;
 
-    if (enteredNewPassword.trim().length < 6) {
-        setFeedback("Password must be at least 6 characters.");
-        return;
-    }
+    const enteredName = fullNameInputRef.current.value;
+    const enteredPhotoURL = profileUrlInputRef.current.value;
 
-    try {
-      const response = await fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDz3WFPJfsv9G0Fb7xB4V8yrN4YECxhdG8",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            idToken: authCtx.token,
-            password: enteredNewPassword,
-            returnSecureToken: false,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const data = await response.json();
-        let errorMessage = "Password update failed.";
-        if (data && data.error && data.error.message) {
-          errorMessage = data.error.message;
-        }
-        throw new Error(errorMessage);
+    fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDz3WFPJfsv9G0Fb7xB4V8yrN4YECxhdG8",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idToken: authCtx.token,
+          displayName: enteredName,
+          photoUrl: enteredPhotoURL,
+          returnSecureToken: true,
+        }),
       }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Profile Update Failed.");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Profile Updated:", data);
+        setSuccessMessage("Profile Updated Successfully!");
 
-      setFeedback("Password updated successfully!");
-    } catch (err) {
-      setFeedback(err.message);
-    }
+        fullNameInputRef.current.value = "";
+        profileUrlInputRef.current.value = "";
+
+        // Redirect to homepage after 2 seconds
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      })
+      .catch((error) => {
+        console.error("Error Updating Profile:", error);
+        setSuccessMessage("Failed To Update Profile.");
+      });
   };
 
   return (
-    <form className={classes.form} onSubmit={submitHandler}>
-      <div className={classes.control}>
-        <label htmlFor="new-password">New Password</label>
-        <input
-          type="password"
-          id="new-password"
-          minLength="6"
-          ref={newPasswordInputRef}
-          required
-        />
-      </div>
-      <div className={classes.action}>
-        <button>Change Password</button>
-      </div>
-      {feedback && (
-        <p style={{ color: feedback.includes("successfully") ? "green" : "red" }}>
-          {feedback}
-        </p>
-      )}
-    </form>
+    <div>
+      <form className={classes.form} onSubmit={updateProfile}>
+        <div className={classes.control}>
+          <label htmlFor="full-name">Full Name</label>
+          <input type="text" id="full-name" ref={fullNameInputRef} required />
+        </div>
+        <div className={classes.control}>
+          <label htmlFor="photo-url">Profile Photo URL</label>
+          <input
+            type="text"
+            id="photo-url"
+            ref={profileUrlInputRef}
+            required
+          />
+        </div>
+        <div className={classes.action}>
+          <button type="submit" className={classes.update}>
+            Update
+          </button>
+          <button onClick={cancelHandler} className={classes.cancel}>
+            Cancel
+          </button>
+        </div>
+      </form>
+      {successMessage && <p className={classes.success}>{successMessage}</p>}
+    </div>
   );
 };
 
