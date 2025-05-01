@@ -1,4 +1,4 @@
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../Store/AuthContext";
 import StartingPageContent from "../components/StartingPage/StartingPageContent"; 
@@ -7,6 +7,42 @@ import classes from "./HomePage.module.css";
 const HomePage = () => {
     const authCtx = useContext(AuthContext);
     const navigate = useNavigate();
+    const [isProfileComplete, setIsProfileComplete] = useState(false);
+  
+    useEffect(() => {
+      const checkProfileCompletion = async () => {
+        if (!authCtx.isLoggedIn) return;
+        
+        try {
+          const response = await fetch(
+            "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDz3WFPJfsv9G0Fb7xB4V8yrN4YECxhdG8",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                idToken: authCtx.token,
+              }),
+            }
+          );
+  
+          if (!response.ok) {
+            throw new Error("Failed to fetch profile data");
+          }
+  
+          const data = await response.json();
+          if (data.users && data.users.length > 0) {
+            const user = data.users[0];
+            setIsProfileComplete(!!user.displayName && !!user.photoUrl);
+          }
+        } catch (err) {
+          console.error("Error checking profile:", err);
+        }
+      };
+  
+      checkProfileCompletion();
+    }, [authCtx.isLoggedIn, authCtx.token]);
   
     const profileHandler = () => {
       navigate("./profile");
@@ -21,8 +57,17 @@ const HomePage = () => {
                 </div>
                 <div className={classes.profileContainer}>
                 <div className={classes.profile}>
-                    <p>Your Profile Is Incomplete</p>
-                    <button onClick={profileHandler}>Complete Now</button>
+                    {!isProfileComplete ? (
+                      <>
+                        <p>Your Profile Is Incomplete</p>
+                        <button onClick={profileHandler}>Complete Now</button>
+                      </>
+                    ) : (
+                      <>
+                        <p>Your Profile Is Complete</p>
+                        <button onClick={profileHandler}>Update Profile</button>
+                      </>
+                    )}
                 </div>
                 </div>
             </section>

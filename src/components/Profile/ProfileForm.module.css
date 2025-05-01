@@ -95,7 +95,18 @@
   font-size: 1rem;
 }
 
-/* Responsive adjustments */
+.loading {
+  text-align: center;
+  color: #555;
+  margin: 20px 0;
+}
+
+.error {
+  text-align: center;
+  color: #d9534f;
+  margin: 20px 0;
+}
+
 @media (max-width: 768px) {
   .form {
     padding: 1.5rem;
@@ -113,7 +124,6 @@
   }
 }
 
-/* Animation for form entry */
 @keyframes formEnter {
   from {
     opacity: 0;
