@@ -12,7 +12,10 @@ const MainNavigation = () => {
   const isLoggedIn = authCtx.isLoggedIn;
 
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn) {
+      setUserData(null);
+      return;
+    }
 
     const fetchUserData = async () => {
       try {
