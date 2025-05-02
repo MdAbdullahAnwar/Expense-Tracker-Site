@@ -82,6 +82,7 @@ button:hover {
   width: 45px;
   height: 45px;
   border-radius: 50%;
+  border: solid black 1px;
   object-fit: cover;
 }
 
@@ -93,7 +94,7 @@ button:hover {
 }
 
 .userInfo button {
-  margin-right: 0;
+  margin-right: 0px;
 }
 
 /* Medium screens and up */

@@ -20,7 +20,6 @@ const AuthForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Update mode when URL query param changes
   useEffect(() => {
     setIsLogin(modeFromURL !== "signup");
   }, [modeFromURL]);
@@ -72,20 +71,52 @@ const AuthForm = () => {
         },
       });
 
+      const data = await response.json();
       setIsLoading(false);
 
       if (!response.ok) {
-        const data = await response.json();
         let errorMessage = "Authentication Failed!";
-        if (data && data.error && data.error.message) {
+        if (data?.error?.message) {
           errorMessage = data.error.message;
         }
         throw new Error(errorMessage);
       }
 
-      const data = await response.json();
-      authCtx.login(data.idToken);
-      navigate("/");
+      if (isLogin) {
+        // For login: you may want to lookup email verification status
+        const userLookup = await fetch(
+          `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDz3WFPJfsv9G0Fb7xB4V8yrN4YECxhdG8`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idToken: data.idToken }),
+          }
+        );
+
+        const lookupData = await userLookup.json();
+        const user = lookupData.users?.[0];
+        const emailVerified = user?.emailVerified || false;
+
+        authCtx.login(data.idToken, emailVerified);
+        navigate("/");
+      } else {
+        // For signup: email is not verified yet
+        authCtx.login(data.idToken, false);
+
+        const result = await authCtx.sendEmailVerification();
+
+        if (result.success) {
+          navigate("/", {
+            state: { message: "Account created! Verification email sent." },
+          });
+        } else {
+          navigate("/", {
+            state: {
+              message: "Account created! Please verify your email later.",
+            },
+          });
+        }
+      }
     } catch (err) {
       setIsLoading(false);
       setError(err.message);
@@ -118,7 +149,7 @@ const AuthForm = () => {
 
       if (!response.ok) {
         let errorMessage = "Failed to send reset link.";
-        if (data && data.error && data.error.message) {
+        if (data?.error?.message) {
           errorMessage = data.error.message;
         }
         throw new Error(errorMessage);
