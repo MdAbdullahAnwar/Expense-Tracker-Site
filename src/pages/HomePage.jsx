@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "../Store/AuthContext";
 import StartingPageContent from "../components/StartingPage/StartingPageContent";
 import EmailVerificationBanner from "../components/Auth/EmailVerificationBanner";
+import AddExpenseForm from "../components/Expense Tracker/AddExpenseForm";
 import classes from "./HomePage.module.css";
 
 const HomePage = () => {
@@ -67,7 +68,10 @@ const HomePage = () => {
               ) : (
                 <>
                   <p>Congratulations! Profile is verified</p>
-                  <button onClick={profileHandler}>Update Profile</button>
+                  <div className={classes.buttonGroup}>
+                    <button onClick={profileHandler}>Update Profile</button>
+                    <button onClick={() => navigate("/add-expense")}>Add Expense</button>
+                  </div>
                 </>
               )}
             </div>

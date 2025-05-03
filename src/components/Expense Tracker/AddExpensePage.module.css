@@ -1,0 +1,19 @@
+.container {
+    padding: 2rem;
+    max-width: 90vw;
+    margin: 0 auto;
+  }
+  
+  .heading {
+    text-align: center;
+    padding: 1.5rem;
+    margin: 0 0 2rem 0;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.8rem;
+    background: linear-gradient(45deg, #00BFFF, #20B2AA); /* Deep Sky Blue to Light Sea Green */
+
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  

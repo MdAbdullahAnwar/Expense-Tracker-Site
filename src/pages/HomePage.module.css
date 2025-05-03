@@ -2,7 +2,6 @@
     display: grid;
     place-items: center;
     min-height: 90vh;
-    background: linear-gradient(to right, #f0f4ff, #d9e4ff);
     padding: 2rem;
     position: relative;
     overflow: hidden;
@@ -13,7 +12,8 @@
     width: 100%;
     padding: 2rem 1rem;
     text-align: center;
-    background: linear-gradient(to right, #667eea, #764ba2);
+    background: linear-gradient(45deg, #00BFFF, #20B2AA); /* Deep Sky Blue to Light Sea Green */
+
     color: #ffffff;
     font-size: 2.5rem;
     font-weight: 700;
@@ -53,6 +53,7 @@
     color: white;
     border: none;
     border-radius: 8px;
+    margin: 0.5rem;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;

@@ -4,6 +4,7 @@ import UserProfile from "./components/Profile/UserProfile";
 import AuthPage from "./pages/AuthPage";
 import ForgotPassword from "./components/Auth/ForgotPassword";
 import HomePage from "./pages/HomePage";
+import AddExpensePage from "./components/Expense Tracker/AddExpensePage";
 import { AuthContextProvider } from "./Store/AuthContext";
 import ProtectedRoute from "./components/PrivateRoute/ProtectedRoute";
 
@@ -15,12 +16,20 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/auth" element={<AuthPage />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} /> 
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
               path="/profile"
               element={
                 <ProtectedRoute>
                   <UserProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/add-expense"
+              element={
+                <ProtectedRoute>
+                  <AddExpensePage />
                 </ProtectedRoute>
               }
             />
