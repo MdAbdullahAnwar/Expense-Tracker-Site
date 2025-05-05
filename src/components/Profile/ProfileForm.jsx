@@ -88,7 +88,10 @@ const ProfileForm = () => {
         console.log("Profile Updated:", data);
         setSuccessMessage("Profile Updated Successfully!");
 
-        // Don't clear the inputs after update
+        // Clear the form inputs
+        fullNameInputRef.current.value = "";
+        profileUrlInputRef.current.value = "";
+        
         // Redirect to homepage after 2 seconds
         setTimeout(() => {
           navigate("/");
