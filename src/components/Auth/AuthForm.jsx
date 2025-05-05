@@ -56,8 +56,7 @@ const AuthForm = () => {
     const URL = isLogin
       ? "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDz3WFPJfsv9G0Fb7xB4V8yrN4YECxhdG8"
       : "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDz3WFPJfsv9G0Fb7xB4V8yrN4YECxhdG8";
-
-    try {
+      try {
       const response = await fetch(URL, {
         method: "POST",
         body: JSON.stringify({
@@ -69,35 +68,32 @@ const AuthForm = () => {
           "Content-Type": "application/json",
         },
       });
-
+    
       const data = await response.json();
-
+    
       if (!response.ok) {
-        let errorMessage = "Authentication failed!";
-        if (data?.error?.message) errorMessage = data.error.message;
-        throw new Error(errorMessage);
-      }
-
-      if (isLogin) {
-        // Lookup to verify email
-        const verifyRes = await fetch(
-          "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDz3WFPJfsv9G0Fb7xB4V8yrN4YECxhdG8",
+        throw new Error(data.error.message || "Authentication failed!");
+      }  
+      // Get user details
+      const verifyRes = await fetch(
+        "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDz3WFPJfsv9G0Fb7xB4V8yrN4YECxhdG8",
           {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ idToken: data.idToken }),
-          }
-        );
-        const verifyData = await verifyRes.json();
-        const emailVerified = verifyData.users?.[0]?.emailVerified || false;
-
-        authCtx.login(data.idToken, emailVerified);
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ idToken: data.idToken }),
+        }
+      );
+      const verifyData = await verifyRes.json();
+      const emailVerified = verifyData.users?.[0]?.emailVerified || false;
+      const userId = verifyData.users?.[0]?.localId; // Get Firebase UID
+    
+      authCtx.login(data.idToken, userId, emailVerified);
+        
+      if (isLogin) {
         navigate("/");
       } else {
-        // For sign up: send email verification
-        authCtx.login(data.idToken, false);
         const verificationSent = await authCtx.sendEmailVerification();
         navigate("/", {
           state: {

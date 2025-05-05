@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 
 const AuthContext = React.createContext({
   token: "",
+  userId: "",
   isLoggedIn: false,
   isEmailVerified: false,
-  login: (token, emailVerified) => {},
+  login: (token, userId, emailVerified) => {},
   logout: () => {},
   sendEmailVerification: () => Promise.resolve({ success: false, message: "" }),
   checkEmailVerification: () => Promise.resolve(false),
@@ -12,23 +13,29 @@ const AuthContext = React.createContext({
 
 export const AuthContextProvider = (props) => {
   const initialState = localStorage.getItem("token");
+  const initialUserId = localStorage.getItem("userId");
   const initialEmailVerified = localStorage.getItem("emailVerified") === 'true';
   const [token, setToken] = useState(initialState);
+  const [userId, setUserId] = useState(initialUserId);
   const [isEmailVerified, setIsEmailVerified] = useState(initialEmailVerified);
 
   const userIsLoggedIn = !!token;
 
-  const loginHandler = (token, emailVerified = false) => {
+  const loginHandler = (token, userId, emailVerified = false) => {
     setToken(token);
+    setUserId(userId);
     setIsEmailVerified(emailVerified);
     localStorage.setItem("token", token);
+    localStorage.setItem("userId", userId);
     localStorage.setItem("emailVerified", emailVerified);
   };
 
   const logoutHandler = () => {
     setToken(null);
+    setUserId(null);
     setIsEmailVerified(false);
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
     localStorage.removeItem("emailVerified");
   };
 
@@ -114,6 +121,7 @@ export const AuthContextProvider = (props) => {
 
   const contextValue = {
     token: token,
+    userId: userId,
     isLoggedIn: userIsLoggedIn,
     isEmailVerified: isEmailVerified,
     login: loginHandler,

@@ -1,67 +1,67 @@
 .banner {
-    background-color: #fff3cd;
-    color: #856404;
-    padding: 1rem;
-    border: 1px solid #ffeeba;
-    border-radius: 4px;
-    margin: 1rem auto;
-    max-width: 800px;
-  }
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 1rem;
+  border: 1px solid #ffeeba;
+  border-radius: 4px;
+  margin: 1rem auto;
+  max-width: 800px;
+}
   
-  .content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
   
-  .success {
-    color: #155724;
-    background-color: #d4edda;
-    padding: 0.5rem;
-    border-radius: 4px;
-  }
+.success {
+  color: #155724;
+  background-color: #d4edda;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
   
-  .error {
-    color: #721c24;
-    background-color: #f8d7da;
-    padding: 0.5rem;
-    border-radius: 4px;
-  }
+.error {
+  color: #721c24;
+  background-color: #f8d7da;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
   
-  .actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 0.5rem;
-  }
+.actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
   
-  .button {
-    background-color: #ffc107;
-    color: #856404;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
+.button {
+  background-color: #ffc107;
+  color: #856404;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
   
-  .button:hover {
-    background-color: #e0a800;
-  }
+.button:hover {
+  background-color: #e0a800;
+}
   
-  .button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
   
-  .closeButton {
-    background-color: transparent;
-    color: #856404;
-    border: 1px solid #856404;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+.closeButton {
+  background-color: transparent;
+  color: #856404;
+  border: 1px solid #856404;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
   
-  .closeButton:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
+.closeButton:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
