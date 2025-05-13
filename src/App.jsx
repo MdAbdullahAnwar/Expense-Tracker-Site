@@ -1,4 +1,7 @@
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
+import { Provider } from "react-redux"; // Redux
+import store from "./Store/store/index"; // Your Redux store
+
 import Layout from "./components/Layout/Layout";
 import UserProfile from "./components/Profile/UserProfile";
 import AuthPage from "./pages/AuthPage";
@@ -10,33 +13,35 @@ import ProtectedRoute from "./components/PrivateRoute/ProtectedRoute";
 
 function App() {
   return (
-    <AuthContextProvider>
-      <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/auth" element={<AuthPage />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <UserProfile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/add-expense"
-              element={
-                <ProtectedRoute>
-                  <AddExpensePage />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Layout>
-      </Router>
-    </AuthContextProvider>
+    <Provider store={store}>
+      <AuthContextProvider>
+        <Router>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <UserProfile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/add-expense"
+                element={
+                  <ProtectedRoute>
+                    <AddExpensePage />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Layout>
+        </Router>
+      </AuthContextProvider>
+    </Provider>
   );
 }
 

@@ -1,21 +1,26 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import classes from "./AddExpenseForm.module.css";
 import AuthContext from "../../Store/AuthContext";
+import { addExpense, removeExpense, setExpenses } from "../../Store/store/expenseSlice";
+
+const FIREBASE_DB_URL = "https://expense-tracker-ebc34-default-rtdb.firebaseio.com";
 
 const AddExpenseForm = () => {
-  const [expenses, setExpenses] = useState([]);
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Entertainment");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [editingExpense, setEditingExpense] = useState(null);
-  
+
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const FIREBASE_DB_URL = "https://expense-tracker-ebc34-default-rtdb.firebaseio.com";
+  const expenses = useSelector((state) => state.expenses.items);
+  const showPremium = useSelector((state) => state.expenses.showPremium);
 
   useEffect(() => {
     const fetchExpenses = async () => {
@@ -27,17 +32,17 @@ const AddExpenseForm = () => {
         const response = await fetch(
           `${FIREBASE_DB_URL}/users/${authCtx.userId}/expenses.json?auth=${authCtx.token}`
         );
-        
+
         if (!response.ok) throw new Error("Failed to fetch expenses.");
-        
+
         const data = await response.json();
         const loadedExpenses = [];
-        
+
         if (data) {
           for (const key in data) {
             loadedExpenses.push({
               id: key,
-              amount: data[key].amount,
+              amount: +data[key].amount,
               description: data[key].description,
               category: data[key].category,
               date: data[key].date || new Date().toISOString(),
@@ -45,8 +50,8 @@ const AddExpenseForm = () => {
           }
           loadedExpenses.sort((a, b) => new Date(b.date) - new Date(a.date));
         }
-        
-        setExpenses(loadedExpenses);
+
+        dispatch(setExpenses(loadedExpenses));
       } catch (err) {
         setError(err.message);
       } finally {
@@ -55,11 +60,11 @@ const AddExpenseForm = () => {
     };
 
     fetchExpenses();
-  }, [authCtx.token, authCtx.isLoggedIn, authCtx.userId]);
+  }, [authCtx.token, authCtx.isLoggedIn, authCtx.userId, dispatch]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    
+
     if (!authCtx.isLoggedIn || !authCtx.userId) {
       setError("Please login to add expenses");
       return;
@@ -76,46 +81,38 @@ const AddExpenseForm = () => {
     setError(null);
     try {
       if (editingExpense) {
-        // Update existing expense
         const response = await fetch(
           `${FIREBASE_DB_URL}/users/${authCtx.userId}/expenses/${editingExpense.id}.json?auth=${authCtx.token}`,
           {
             method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(expenseData),
           }
         );
-        
         if (!response.ok) throw new Error("Failed to update expense.");
-        
-        setExpenses(prev => prev.map(exp => 
-          exp.id === editingExpense.id ? { ...exp, ...expenseData } : exp
+
+        dispatch(setExpenses(
+          expenses.map((exp) =>
+            exp.id === editingExpense.id ? { ...exp, ...expenseData } : exp
+          )
         ));
         setEditingExpense(null);
       } else {
-        // Add new expense
         const response = await fetch(
           `${FIREBASE_DB_URL}/users/${authCtx.userId}/expenses.json?auth=${authCtx.token}`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(expenseData),
           }
         );
-        
         if (!response.ok) throw new Error("Failed to add expense.");
-        
+
         const data = await response.json();
-        setExpenses(prev => [{
-          id: data.name,
-          ...expenseData
-        }, ...prev]);
+        const newExpense = { id: data.name, ...expenseData };
+        dispatch(addExpense(newExpense));
       }
-      
+
       setAmount("");
       setDescription("");
       setCategory("Entertainment");
@@ -138,11 +135,10 @@ const AddExpenseForm = () => {
           method: "DELETE",
         }
       );
-      
+
       if (!response.ok) throw new Error("Failed to delete expense.");
-      
-      setExpenses(prev => prev.filter(exp => exp.id !== expenseId));
-      console.log("Expense successfully deleted");
+
+      dispatch(removeExpense(expenseId));
     } catch (err) {
       setError(err.message);
     } finally {
@@ -169,6 +165,7 @@ const AddExpenseForm = () => {
   return (
     <div className={classes.expenseContainer}>
       <h2>{editingExpense ? "Edit Expense" : "Add Daily Expenses"}</h2>
+
       <form onSubmit={submitHandler} className={classes.form}>
         <input
           type="number"
@@ -198,13 +195,17 @@ const AddExpenseForm = () => {
         </select>
         <div className={classes.formActions}>
           <button type="submit" disabled={isLoading}>
-            {isLoading 
-              ? editingExpense ? "Updating..." : "Adding..." 
-              : editingExpense ? "Update Expense" : "Add Expense"}
+            {isLoading
+              ? editingExpense
+                ? "Updating..."
+                : "Adding..."
+              : editingExpense
+              ? "Update Expense"
+              : "Add Expense"}
           </button>
           {editingExpense && (
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={cancelEditingHandler}
               className={classes.cancelButton}
             >
@@ -224,8 +225,8 @@ const AddExpenseForm = () => {
             {expenses.map((exp) => (
               <li key={exp.id}>
                 <span>
-                  ₹{exp.amount} - {exp.description} [{exp.category}] 
-                  ({new Date(exp.date).toLocaleDateString()})
+                  ₹{exp.amount} - {exp.description} [{exp.category}] (
+                  {new Date(exp.date).toLocaleDateString()})
                 </span>
                 <div className={classes.expenseActions}>
                   <button
@@ -248,7 +249,15 @@ const AddExpenseForm = () => {
           </ul>
         </div>
       ) : (
-        !isLoading && <p className={classes.noExpenses}>No expenses found. Add your first expense!</p>
+        !isLoading && (
+          <p className={classes.noExpenses}>No expenses found. Add your first expense!</p>
+        )
+      )}
+
+      {showPremium && (
+        <button className={classes.premiumButton}>
+          Activate Premium
+        </button>
       )}
 
       <button onClick={backHandler} className={classes.backButton}>
