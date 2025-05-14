@@ -1,0 +1,17 @@
+.toggle {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle:hover {
+  background-color: var(--input-bg);
+}
+
+.dark {
+  border-color: #4a5568;
+}

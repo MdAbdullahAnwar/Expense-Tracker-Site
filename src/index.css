@@ -1,4 +1,4 @@
-/* Modern CSS Reset */
+/* === Root Variables === */
 :root {
   --primary: #4f46e5;
   --primary-dark: #4338ca;
@@ -12,14 +12,31 @@
   --gray-200: #e5e7eb;
   --gray-300: #d1d5db;
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --transition: all 0.2s ease-in-out;
+
+  --bg-color: #f7fafc;
+  --text-color: #1a202c;
+  --card-bg: #ffffff;
+  --input-bg: #edf2f7;
+  --border-color: #e2e8f0;
 }
 
+[data-theme="dark"] {
+  --bg-color: #1a202c;
+  --text-color: #f7fafc;
+  --card-bg: #2d3748;
+  --input-bg: #4a5568;
+  --border-color: #4a5568;
+}
+
+/* === CSS Reset & Base Styles === */
 *,
 *::before,
 *::after {
@@ -39,8 +56,9 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   line-height: 1.5;
   color: var(--text);
-  background-color: var(--gray-50);
+  background-color: var(--bg-color);
   min-height: 100vh;
+  transition: all 0.3s ease;
 }
 
 #root {
@@ -76,11 +94,12 @@ a {
   text-decoration: none;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
-/* Animation Classes */
+/* === Animations === */
 .fade-in {
   animation: fadeIn 0.3s ease-out forwards;
 }
@@ -96,7 +115,7 @@ ul, ol {
   }
 }
 
-/* Scrollbar Styling */
+/* === Scrollbar Styling === */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -115,13 +134,13 @@ ul, ol {
   background: var(--primary);
 }
 
-/* Focus Styles */
+/* === Focus Styles === */
 :focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
-/* Utility Classes */
+/* === Utility Classes === */
 .container {
   width: 100%;
   max-width: 1200px;
@@ -145,7 +164,7 @@ ul, ol {
   text-align: center;
 }
 
-/* Loading Spinner */
+/* === Loading Spinner === */
 .loading-spinner {
   display: inline-block;
   width: 2rem;
@@ -157,5 +176,7 @@ ul, ol {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }

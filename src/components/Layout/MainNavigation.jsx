@@ -1,15 +1,22 @@
 import { useContext, useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import AuthContext from "../../Store/AuthContext";
+import ThemeToggle from "../Theme/ThemeToggle";
 import classes from "./MainNavigation.module.css";
+import { FiSun, FiMoon } from "react-icons/fi";
+import { toggleTheme } from "../../Store/store/themeSlice";
 
 const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const [userData, setUserData] = useState(null);
-
   const isLoggedIn = authCtx.isLoggedIn;
+
+  const { isPremiumActivated } = useSelector((state) => state.expenses);
+  const darkMode = useSelector((state) => state.theme.darkMode);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -68,30 +75,53 @@ const MainNavigation = () => {
         <ul>
           {!isLoggedIn && (
             <li>
-              <button onClick={toggleAuthModeHandler}>
+              <button onClick={toggleAuthModeHandler} className={classes.authButton}>
                 {location.search.includes("signup") ? "Login" : "Sign Up"}
               </button>
             </li>
           )}
+
           {isLoggedIn && (
-            <li>
-              <Link to="/profile">Profile</Link>
-            </li>
-          )}
-          {isLoggedIn && (
-            <li className={classes.userInfo}>
-              <button onClick={logoutHandler}>Logout</button>
+            <>
+              <li className={classes.desktopOnly}>
+                <Link to="/profile">Profile</Link>
+              </li>
+              <li className={classes.desktopOnly}>
+                <Link to="/add-expense">Expenses</Link>
+              </li>
+              {isPremiumActivated && (
+                <>
+                  <li className={classes.desktopOnly}>
+                    <ThemeToggle />
+                  </li>
+                  <li className={classes.mobileOnly}>
+                    {darkMode ? (
+                      <FiSun className={classes.themeIcon} onClick={() => dispatch(toggleTheme())} />
+                    ) : (
+                      <FiMoon className={classes.themeIcon} onClick={() => dispatch(toggleTheme())} />
+                    )}
+                  </li>
+                </>
+              )}
+              <li className={`${classes.userInfo} ${classes.mobileCompact}`}>
+                <button onClick={logoutHandler} className={classes.mobileLogout}>
+                  Logout
+                </button>
+                {userData?.photoUrl && (
+                  <img
+                    src={userData.photoUrl}
+                    alt="Profile"
+                    className={classes.profileImage}
+                  />
+                )}
+              </li>
+              {/* Show user's display name on desktop */}
               {userData?.displayName && (
-                <span className={classes.userName}>{userData.displayName}</span>
+                <li className={`${classes.desktopOnly} ${classes.userName}`}>
+                  {userData.displayName}
+                </li>
               )}
-              {userData?.photoUrl && (
-                <img
-                  src={userData.photoUrl}
-                  alt="Profile"
-                  className={classes.profileImage}
-                />
-              )}
-            </li>
+            </>
           )}
         </ul>
       </nav>

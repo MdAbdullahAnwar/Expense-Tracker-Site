@@ -1,3 +1,4 @@
+/* Main Header */
 .header {
   position: sticky;
   top: 0;
@@ -12,6 +13,7 @@
   z-index: 10;
 }
 
+/* Logo */
 .logo {
   font-size: 1.5rem;
   color: white;
@@ -27,6 +29,7 @@
   text-shadow: 0 2px 5px rgba(255, 255, 255, 0.3);
 }
 
+/* Nav Layout */
 nav ul {
   display: flex;
   list-style: none;
@@ -36,6 +39,7 @@ nav ul {
   gap: 1rem;
 }
 
+/* Nav Links */
 nav a {
   color: white;
   text-decoration: none;
@@ -52,6 +56,7 @@ nav a:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Buttons */
 button {
   cursor: pointer;
   font: inherit;
@@ -71,65 +76,97 @@ button:hover {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Auth Button */
+.authButton {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid white;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* User Info Section */
 .userInfo {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
   margin-left: auto;
 }
 
 .profileImage {
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border: solid black 1px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   object-fit: cover;
 }
 
-.userName {
-  font-weight: 400;
-  font-size: 1.25rem;
+/* Theme Icon */
+.themeIcon {
+  font-size: 1.5rem;
   color: white;
-  display: none; /* Hidden by default on small screens */
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.userInfo button {
-  margin-right: 0px;
+.themeIcon:hover {
+  transform: scale(1.1);
 }
 
-/* Medium screens and up */
-@media (min-width: 768px) {
-  .header {
-    padding: 0 10%;
+/* Responsive Classes */
+.desktopOnly {
+  display: flex;
+}
+
+.mobileOnly {
+  display: none;
+}
+
+.mobileCompact {
+  gap: 0.5rem;
+}
+
+.mobileLogout {
+  padding: 0.3rem 0.8rem;
+}
+
+/* Small Screens */
+@media (max-width: 767px) {
+  .desktopOnly {
+    display: none;
   }
-  
-  nav ul {
-    gap: 1.5rem;
+
+  .mobileOnly {
+    display: flex;
   }
-  
-  nav a {
-    padding: 0.5rem 1rem;
-  }
-  
-  button {
-    padding: 0.5rem 1.5rem;
-  }
-  
+
   .userName {
-    display: inline; /* Show username on larger screens */
-    margin-right: 10px;
+    display: none;
   }
-  
+
   .profileImage {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
+  }
+
+  button {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .mobileCompact {
+    gap: 0.5rem;
   }
 }
 
-/* Large screens */
-@media (min-width: 1024px) {
-  .profileImage {
-    width: 50px;
-    height: 50px;
+/* Medium Screens */
+@media (min-width: 768px) {
+  .userName {
+    display: inline;
+    font-weight: 400;
+    font-size: 1.25rem;
+    color: white;
   }
 }

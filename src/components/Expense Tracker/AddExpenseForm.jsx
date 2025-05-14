@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import classes from "./AddExpenseForm.module.css";
 import AuthContext from "../../Store/AuthContext";
-import { addExpense, removeExpense, setExpenses } from "../../Store/store/expenseSlice";
+import { addExpense, removeExpense, setExpenses, activatePremium } from "../../Store/store/expenseSlice";
+import { toggleTheme } from "../../Store/store/themeSlice";
 
 const FIREBASE_DB_URL = "https://expense-tracker-ebc34-default-rtdb.firebaseio.com";
 
@@ -20,7 +21,9 @@ const AddExpenseForm = () => {
   const dispatch = useDispatch();
 
   const expenses = useSelector((state) => state.expenses.items);
-  const showPremium = useSelector((state) => state.expenses.showPremium);
+  const showPremiumButton = useSelector((state) => state.expenses.showPremiumButton);
+  const isPremiumActivated = useSelector((state) => state.expenses.isPremiumActivated);
+  const darkMode = useSelector((state) => state.theme.darkMode);
 
   useEffect(() => {
     const fetchExpenses = async () => {
@@ -160,10 +163,27 @@ const AddExpenseForm = () => {
     setCategory("Entertainment");
   };
 
+  const downloadExpensesCSV = () => {
+    const csvContent = [
+      "Amount,Description,Category,Date",
+      ...expenses.map(exp => 
+        `"${exp.amount}","${exp.description}","${exp.category}","${new Date(exp.date).toLocaleDateString()}"`
+      )
+    ].join("\n");
+    
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "expenses.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   const backHandler = () => navigate("/");
 
   return (
-    <div className={classes.expenseContainer}>
+    <div className={`${classes.expenseContainer} ${darkMode ? classes.dark : ''}`}>
       <h2>{editingExpense ? "Edit Expense" : "Add Daily Expenses"}</h2>
 
       <form onSubmit={submitHandler} className={classes.form}>
@@ -215,6 +235,26 @@ const AddExpenseForm = () => {
         </div>
       </form>
 
+      {showPremiumButton && (
+        <button 
+          onClick={() => dispatch(activatePremium())}
+          className={classes.premiumButton}
+        >
+          Activate Premium
+        </button>
+      )}
+
+      {isPremiumActivated && (
+        <div className={classes.premiumFeatures}>
+          <button 
+            onClick={downloadExpensesCSV}
+            className={classes.downloadButton}
+          >
+            Download Expenses
+          </button>
+        </div>
+      )}
+
       {isLoading && <p>Loading...</p>}
       {error && <p className={classes.error}>{error}</p>}
 
@@ -252,12 +292,6 @@ const AddExpenseForm = () => {
         !isLoading && (
           <p className={classes.noExpenses}>No expenses found. Add your first expense!</p>
         )
-      )}
-
-      {showPremium && (
-        <button className={classes.premiumButton}>
-          Activate Premium
-        </button>
       )}
 
       <button onClick={backHandler} className={classes.backButton}>
