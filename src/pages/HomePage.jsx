@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "../Store/AuthContext";
 import StartingPageContent from "../components/StartingPage/StartingPageContent";
 import EmailVerificationBanner from "../components/Auth/EmailVerificationBanner";
-import AddExpenseForm from "../components/Expense Tracker/AddExpenseForm";
 import classes from "./HomePage.module.css";
 
 const HomePage = () => {

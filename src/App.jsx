@@ -8,7 +8,6 @@ import AddExpensePage from "./components/Expense Tracker/AddExpensePage";
 import { AuthContextProvider } from "./Store/AuthContext";
 import ProtectedRoute from "./components/PrivateRoute/ProtectedRoute";
 
-// Redux imports
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 

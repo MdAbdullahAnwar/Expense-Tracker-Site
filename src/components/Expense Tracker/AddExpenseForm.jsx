@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import classes from "./AddExpenseForm.module.css";
 import AuthContext from "../../Store/AuthContext";
 import { addExpense, removeExpense, setExpenses, activatePremium } from "../../Store/store/expenseSlice";
-import { toggleTheme } from "../../Store/store/themeSlice";
 
 const FIREBASE_DB_URL = "https://expense-tracker-ebc34-default-rtdb.firebaseio.com";
 
