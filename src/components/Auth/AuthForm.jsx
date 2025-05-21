@@ -1,4 +1,4 @@
-import { useState, useRef, useContext, useEffect } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import AuthContext from "../../Store/AuthContext";
 import classes from "./AuthForm.module.css";
