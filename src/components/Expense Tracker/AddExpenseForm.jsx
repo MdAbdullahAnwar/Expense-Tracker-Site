@@ -11,6 +11,7 @@ const AddExpenseForm = () => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Entertainment");
+  const [customCategory, setCustomCategory] = useState(""); // New state
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [editingExpense, setEditingExpense] = useState(null);
@@ -72,10 +73,12 @@ const AddExpenseForm = () => {
       return;
     }
 
+    const finalCategory = category === "Other" ? customCategory.trim() || "Other" : category;
+
     const expenseData = {
       amount: +amount,
       description,
-      category,
+      category: finalCategory,
       date: new Date().toISOString(),
     };
 
@@ -118,6 +121,7 @@ const AddExpenseForm = () => {
       setAmount("");
       setDescription("");
       setCategory("Entertainment");
+      setCustomCategory(""); // Reset custom category
     } catch (err) {
       setError(err.message);
     } finally {
@@ -153,6 +157,9 @@ const AddExpenseForm = () => {
     setAmount(expense.amount);
     setDescription(expense.description);
     setCategory(expense.category);
+    if (expense.category === "Other") {
+      setCustomCategory(""); // Let user input new category
+    }
   };
 
   const cancelEditingHandler = () => {
@@ -160,6 +167,7 @@ const AddExpenseForm = () => {
     setAmount("");
     setDescription("");
     setCategory("Entertainment");
+    setCustomCategory("");
   };
 
   const downloadExpensesCSV = () => {
@@ -169,7 +177,7 @@ const AddExpenseForm = () => {
         `"${exp.amount}","${exp.description}","${exp.category}","${new Date(exp.date).toLocaleDateString()}"`
       )
     ].join("\n");
-    
+
     const blob = new Blob([csvContent], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -212,6 +220,17 @@ const AddExpenseForm = () => {
           <option value="Transportation">Transportation</option>
           <option value="Other">Other</option>
         </select>
+
+        {category === "Other" && (
+          <input
+            type="text"
+            placeholder="Enter custom category"
+            required
+            value={customCategory}
+            onChange={(e) => setCustomCategory(e.target.value)}
+          />
+        )}
+
         <div className={classes.formActions}>
           <button type="submit" disabled={isLoading}>
             {isLoading
@@ -263,10 +282,14 @@ const AddExpenseForm = () => {
           <ul>
             {expenses.map((exp) => (
               <li key={exp.id}>
-                <span>
-                  ₹{exp.amount} - {exp.description} [{exp.category}] (
-                  {new Date(exp.date).toLocaleDateString()})
-                </span>
+                <div className={classes.expenseDetails}>
+                  <span className={classes.amount}>₹{exp.amount}</span>
+                  <span className={classes.description}>{exp.description}</span>
+                  <span className={classes.categoryBadge}>{exp.category}</span>
+                  <span className={classes.date}>
+                    {new Date(exp.date).toLocaleDateString()}
+                  </span>
+                </div>
                 <div className={classes.expenseActions}>
                   <button
                     onClick={() => startEditingHandler(exp)}
